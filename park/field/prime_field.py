@@ -1,6 +1,7 @@
 import random
 
 
+
 class PrimeField:
     def __init__(self, p: int):
         self.p = p

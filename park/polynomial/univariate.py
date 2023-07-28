@@ -41,7 +41,7 @@ class UnivariatePolynomial:
         return len(self.coeffs)
 
     def __call__(self, __value: int) -> int:
-        """Evaluate the polynomial on an input.
+        """Evaluate the polynomial on an input. Not suitable for SNARKs.
 
         Args:
             __value (int): The input
