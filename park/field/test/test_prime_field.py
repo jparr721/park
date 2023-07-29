@@ -88,4 +88,4 @@ def test_str_representation():
 def test_repr_representation():
     p = 11
     a = PrimeFieldValue(15, p)
-    assert repr(a) == "FieldValueModP(4, 11)"
+    assert repr(a) == "PrimeFieldValue(p=11, value=4)"

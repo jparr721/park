@@ -77,6 +77,9 @@ class FieldValue:
     def __repr__(self):
         return f"FieldValue({self.__value})"
 
+    def __hash__(self):
+        return hash(self.__value)
+
 
 class FiniteField:
     pass

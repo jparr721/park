@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import random
 
+from sympy import isprime
+from typing import List
+
 
 def extended_gcd(a, b):
     """
@@ -18,6 +21,9 @@ def extended_gcd(a, b):
 
 class PrimeFieldValue:
     def __init__(self, value: int, p: int):
+        if not isprime(p):
+            raise ValueError("p must be prime")
+
         self.__value = value % p
         self.__p = p
 
@@ -40,7 +46,7 @@ class PrimeFieldValue:
         if isinstance(other, PrimeFieldValue):
             # Modular inverse using extended Euclidean algorithm
             def mod_inv(a, m):
-                g, x, y = extended_gcd(a, m)
+                _, x, _ = extended_gcd(a, m)
                 return x % m
 
             if other.__value == 0:
@@ -104,15 +110,20 @@ class PrimeFieldValue:
         return str(self.__value)
 
     def __repr__(self):
-        return f"FieldValueModP({self.__value}, {self.__p})"
+        return f"{self.__class__.__name__}(p={self.__p}, value={self.__value})"
+
+    def __hash__(self):
+        return hash(self.__value)
 
 
 class PrimeField:
     def __init__(self, p: int):
+        if not isprime(p):
+            raise ValueError("p must be prime")
         self.p = p
 
         # The values of the finite field
-        self.__vals = list(range(self.p))
+        self.__vals = {PrimeFieldValue(i, p) for i in range(p)}
 
     def __len__(self):
         return self.p
@@ -120,10 +131,22 @@ class PrimeField:
     def __call__(self, __value: int) -> int:
         return __value % self.p
 
-    def sample(self) -> int:
+    def __repr__(self):
+        return f"{self.__class__.__name__}(p={self.p}, vals={{{','.join([str(v) for v in self.__vals])}}})"
+
+    def __str__(self):
+        return repr(self)
+
+    def sample(self, n: int | None = None) -> PrimeFieldValue | List[PrimeFieldValue]:
         """Sample randomly from the finite field
 
         Returns:
-            int: The random sample.
+            PrimeFieldValue: The random sample.
         """
-        return random.choice(self.__vals)
+        if n is not None:
+            if n > self.p:
+                raise ValueError("n must be less than the size of the field")
+
+            return random.sample(sorted(self.__vals), n)
+
+        return random.choice(sorted(self.__vals))

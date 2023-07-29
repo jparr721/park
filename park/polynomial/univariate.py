@@ -1,8 +1,16 @@
-from typing import List
+from typing import List, Tuple
+
+from park.field.prime_field import PrimeFieldValue
 
 
 class UnivariatePolynomial:
-    def __init__(self, *coeffs: List[int]):
+    """Univariate polynomial defined over a prime field."""
+
+    def __init__(self, coeffs: List[PrimeFieldValue] | Tuple[PrimeFieldValue] = ()):
+        # Make sure that the coefficients are sampled from a prime field.
+        if not all([isinstance(c, PrimeFieldValue) for c in coeffs]):
+            raise ValueError("Coefficients must be sampled from a prime field")
+
         # The coefficient of `x^i` is stored at location `i` in the list.
         self.coeffs = coeffs
 
@@ -40,17 +48,16 @@ class UnivariatePolynomial:
         """
         return len(self.coeffs)
 
-    def __call__(self, __value: int) -> int:
-        """Evaluate the polynomial on an input. Not suitable for SNARKs.
+    # def __call__(self, __value: PrimeFieldValue) -> PrimeFieldValue:
+    #     """Evaluate the polynomial on an input. Not suitable for SNARKs.
 
-        Args:
-            __value (int): The input
+    #     Args:
+    #         __value (int): The input
 
-        Returns:
-            int: The polynomial evaluation.
-        """
-        degree = len(self)
-        return sum([c * __value ** (degree - i) for i, c in enumerate(self.coeffs)])
+    #     Returns:
+    #         int: The polynomial evaluation.
+    #     """
+    #     return sum([c * __value ** (self.degree - i) for i, c in enumerate(self.coeffs)])
 
     @property
     def degree(self):
