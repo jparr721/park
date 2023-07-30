@@ -123,19 +123,22 @@ class PrimeField:
         self.p = p
 
         # The values of the finite field
-        self.__vals = {PrimeFieldValue(i, p) for i in range(p)}
+        self.__vals = [PrimeFieldValue(i, p) for i in range(p)]
 
     def __len__(self):
         return self.p
 
-    def __call__(self, __value: int) -> int:
-        return __value % self.p
+    def __call__(self, __value: int) -> PrimeFieldValue:
+        return PrimeFieldValue(__value, self.p)
 
     def __repr__(self):
         return f"{self.__class__.__name__}(p={self.p}, vals={{{','.join([str(v) for v in self.__vals])}}})"
 
     def __str__(self):
         return repr(self)
+
+    def __getitem__(self, __index: int) -> PrimeFieldValue:
+        return self.__vals[__index]
 
     def sample(self, n: int | None = None) -> PrimeFieldValue | List[PrimeFieldValue]:
         """Sample randomly from the finite field
@@ -147,6 +150,6 @@ class PrimeField:
             if n > self.p:
                 raise ValueError("n must be less than the size of the field")
 
-            return random.sample(sorted(self.__vals), n)
+            return random.sample(self.__vals, n)
 
-        return random.choice(sorted(self.__vals))
+        return random.choice(self.__vals)

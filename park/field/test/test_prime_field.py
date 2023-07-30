@@ -27,6 +27,14 @@ def test_multiplication():
     assert c == 1
 
 
+def test_multiplication_int():
+    p = 11
+    a = PrimeFieldValue(3, p)
+    b = 4
+    c = a * b
+    assert c == 1
+
+
 def test_division():
     p = 11
     a = PrimeFieldValue(10, p)
