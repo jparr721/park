@@ -2,7 +2,12 @@
 """
 
 from park.field.prime_field import PrimeFieldValue, PrimeField
-from park.polynomial.multivariate import Term, Variable, MultivariatePolynomial
+from park.polynomial.multivariate import (
+    MultivariatePolynomialTerm,
+    Term,
+    Variable,
+    MultivariatePolynomial,
+)
 
 if __name__ == "__main__":
     t1 = Term(
@@ -29,9 +34,9 @@ if __name__ == "__main__":
     m = MultivariatePolynomial(
         3,
         [
-            (PrimeFieldValue(3, p), t3),
-            (PrimeFieldValue(3, p), t1),
-            (PrimeFieldValue(1, p), t2),
+            MultivariatePolynomialTerm(PrimeFieldValue(3, p), t3),
+            MultivariatePolynomialTerm(PrimeFieldValue(3, p), t1),
+            MultivariatePolynomialTerm(PrimeFieldValue(1, p), t2),
         ],
     )
     print(m)

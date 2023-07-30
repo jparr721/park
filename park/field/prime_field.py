@@ -115,6 +115,10 @@ class PrimeFieldValue:
     def __hash__(self):
         return hash(self.__value)
 
+    @property
+    def is_zero(self):
+        return self.__value == 0
+
 
 class PrimeField:
     def __init__(self, p: int):
