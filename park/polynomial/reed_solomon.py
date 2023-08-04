@@ -4,7 +4,7 @@ from park.field.prime_field import PrimeField, PrimeFieldValue
 from park.polynomial.univariate import UnivariatePolynomial
 
 
-def compute_reed_soloman_evaluations(p: UnivariatePolynomial, f: PrimeField) -> List[PrimeFieldValue]:
+def univariate_reed_solomon(p: UnivariatePolynomial, f: PrimeField) -> List[PrimeFieldValue]:
     """Interprets the coefficients of p and computes the ECC extension over the field.
 
     Args:

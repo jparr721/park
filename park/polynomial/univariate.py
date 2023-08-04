@@ -1,4 +1,7 @@
-from typing import List
+from __future__ import annotations
+from itertools import zip_longest
+
+from typing import Iterator, List
 
 from park.field.prime_field import PrimeFieldValue
 
@@ -10,9 +13,6 @@ class UnivariatePolynomial:
         # Make sure that the coefficients are sampled from a prime field.
         if not all([isinstance(c, PrimeFieldValue) for c in coeffs]):
             raise ValueError("Coefficients must be sampled from a prime field")
-
-        # Strip out zeroes
-        coeffs = list(filter(lambda x: not x.is_zero, coeffs))
 
         # The coefficient of `x^i` is stored at location `i` in the list.
         self.coeffs = coeffs
@@ -49,6 +49,9 @@ class UnivariatePolynomial:
             int: The number of coefficients of the polynomial.
         """
         return len(self.coeffs)
+
+    def __iter__(self) -> Iterator[PrimeFieldValue]:
+        return iter(self.coeffs)
 
     def __call__(self, __value: PrimeFieldValue) -> PrimeFieldValue:
         """Evaluate the polynomial on an input.
