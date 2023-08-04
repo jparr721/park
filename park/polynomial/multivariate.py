@@ -210,7 +210,6 @@ class MultivariatePolynomial:
         )
 
     def __repr__(self):
-        # out = ""
         out = []
 
         for coeff, term in self.__terms:
@@ -218,10 +217,8 @@ class MultivariatePolynomial:
                 continue
 
             if term.is_constant:
-                # out += f"\n{coeff}"
                 out.append(str(coeff))
             else:
                 out.append(f"{coeff}{term}")
-                # out += f"\n{coeff}{term}"
 
         return " + ".join(out)
