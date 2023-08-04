@@ -3,7 +3,7 @@ from __future__ import annotations
 import random
 
 from sympy import isprime
-from typing import List
+from typing import Iterator, List
 
 
 def extended_gcd(a, b):
@@ -143,6 +143,9 @@ class PrimeField:
 
     def __getitem__(self, __index: int) -> PrimeFieldValue:
         return self.__vals[__index]
+
+    def __iter__(self) -> Iterator[PrimeFieldValue]:
+        return iter(self.__vals)
 
     def sample(self, n: int | None = None) -> PrimeFieldValue | List[PrimeFieldValue]:
         """Sample randomly from the finite field

@@ -1,13 +1,12 @@
 import pytest
 
-from park.field.prime_field import PrimeField, PrimeFieldValue
+from park.field.prime_field import PrimeFieldValue
 from park.polynomial.univariate import UnivariatePolynomial
 
 
 @pytest.fixture
 def coeffs():
-    pf = PrimeField(5)
-    return pf.sample(3)
+    return [PrimeFieldValue(value=1, p=5), PrimeFieldValue(value=4, p=5), PrimeFieldValue(value=2, p=5)]
 
 
 def test_univariate_polynomial_init(coeffs):

@@ -1,10 +1,10 @@
 from typing import List
 
-from park.field.prime_field import PrimeField
+from park.field.prime_field import PrimeField, PrimeFieldValue
 from park.polynomial.univariate import UnivariatePolynomial
 
 
-def compute_reed_soloman_evaluations(p: UnivariatePolynomial, f: PrimeField) -> List[int]:
+def compute_reed_soloman_evaluations(p: UnivariatePolynomial, f: PrimeField) -> List[PrimeFieldValue]:
     """Interprets the coefficients of p and computes the ECC extension over the field.
 
     Args:
@@ -15,3 +15,4 @@ def compute_reed_soloman_evaluations(p: UnivariatePolynomial, f: PrimeField) -> 
     """
     if len(f) < len(p):
         raise ValueError(f"Prime field is too small for the polynomial, expected something >> {len(p)}, got {len(f)}")
+    return [p(v) for v in f]
