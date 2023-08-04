@@ -184,6 +184,10 @@ class MultivariatePolynomialTerm:
     def __iter__(self):
         return iter(astuple(self))
 
+    @property
+    def degree(self):
+        return self.term.degree
+
 
 class MultivariatePolynomial:
     def __init__(self, num_vars: int, terms: List[MultivariatePolynomialTerm]):
@@ -200,14 +204,10 @@ class MultivariatePolynomial:
                 dedup.append(term)
             else:
                 # Otherwise, combine
-                dedup[-1] = MultivariatePolynomialTerm(
-                    dedup[-1].coefficient + term.coefficient, dedup[-1].term
-                )
+                dedup[-1] = MultivariatePolynomialTerm(dedup[-1].coefficient + term.coefficient, dedup[-1].term)
 
         # Remove zero entries
-        self.__terms: List[MultivariatePolynomialTerm] = list(
-            filter(lambda x: not x.coefficient.is_zero, dedup)
-        )
+        self.__terms: List[MultivariatePolynomialTerm] = list(filter(lambda x: not x.coefficient.is_zero, dedup))
 
     def __repr__(self):
         out = []
@@ -219,6 +219,15 @@ class MultivariatePolynomial:
             if term.is_constant:
                 out.append(str(coeff))
             else:
-                out.append(f"{coeff}{term}")
+                # Ignore ones
+                if coeff == 1:
+                    out.append(str(term))
+                else:
+                    out.append(f"{coeff}{term}")
 
         return " + ".join(out)
+
+    @property
+    def degree(self):
+        all_degrees = [t.degree for t in self.__terms]
+        return max(all_degrees)

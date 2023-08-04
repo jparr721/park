@@ -1,5 +1,5 @@
-from park.field.prime_field import PrimeField
-from park.polynomial.multivariate import Variable, Term
+from park.polynomial.multivariate import MultivariatePolynomial, MultivariatePolynomialTerm, Variable, Term
+from park.field.prime_field import PrimeFieldValue
 import pytest
 
 
@@ -85,14 +85,98 @@ def test_term_eq(arith_terms):
     assert t2 == t2
 
 
-# def test_term_evaluate():
-#     one = 1
-#     two = 2
+def test_multivariate_init():
+    t1 = Term(
+        [
+            Variable(1, 1),
+            Variable(2, 1),
+        ]
+    )
 
-#     v1 = Variable(one, 1)
-#     v2 = Variable(one, 2)
-#     v3 = Variable(two, 2)
+    t2 = Term(
+        [
+            Variable(0, 1),
+            Variable(2, 1),
+        ]
+    )
 
-#     t = Term([v1, v2, v3, Variable(3, 5), Variable(3, 10)])
-#     p = PrimeField(5)
-#     print(t(p))
+    t3 = Term([Variable(0, 3)])
+
+    p = 11
+
+    m = MultivariatePolynomial(
+        3,
+        [
+            MultivariatePolynomialTerm(PrimeFieldValue(2, p), t3),
+            MultivariatePolynomialTerm(PrimeFieldValue(1, p), t1),
+            MultivariatePolynomialTerm(PrimeFieldValue(1, p), t2),
+            MultivariatePolynomialTerm(PrimeFieldValue(5, p), Term([])),
+        ],
+    )
+    assert m is not None
+    # print(t1)
+    # print(t2)
+    # print(t3)
+    # print(m, m.degree)
+
+
+def test_multivariate_repr():
+    t1 = Term(
+        [
+            Variable(1, 1),
+            Variable(2, 1),
+        ]
+    )
+
+    t2 = Term(
+        [
+            Variable(0, 1),
+            Variable(2, 1),
+        ]
+    )
+
+    t3 = Term([Variable(0, 3)])
+
+    p = 11
+
+    m = MultivariatePolynomial(
+        3,
+        [
+            MultivariatePolynomialTerm(PrimeFieldValue(2, p), t3),
+            MultivariatePolynomialTerm(PrimeFieldValue(1, p), t1),
+            MultivariatePolynomialTerm(PrimeFieldValue(1, p), t2),
+            MultivariatePolynomialTerm(PrimeFieldValue(5, p), Term([])),
+        ],
+    )
+    assert repr(m) == "5 +  * x_1 * x_2 +  * x_0 * x_2 + 2 * x_0^3"
+
+
+def test_multivariate_degree():
+    t1 = Term(
+        [
+            Variable(1, 1),
+            Variable(2, 1),
+        ]
+    )
+
+    t2 = Term(
+        [
+            Variable(0, 1),
+            Variable(2, 1),
+        ]
+    )
+
+    t3 = Term([Variable(0, 3)])
+
+    p = 11
+
+    m = MultivariatePolynomial(
+        3,
+        [
+            MultivariatePolynomialTerm(PrimeFieldValue(2, p), t3),
+            MultivariatePolynomialTerm(PrimeFieldValue(1, p), t1),
+            MultivariatePolynomialTerm(PrimeFieldValue(1, p), t2),
+            MultivariatePolynomialTerm(PrimeFieldValue(5, p), Term([])),
+        ],
+    )
+    assert m.degree == 3

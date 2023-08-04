@@ -110,7 +110,7 @@ class PrimeFieldValue:
         return str(self.__value)
 
     def __repr__(self):
-        return f"{self.__class__.__name__}(p={self.__p}, value={self.__value})"
+        return f"{self.__class__.__name__}(value={self.__value}, p={self.__p})"
 
     def __hash__(self):
         return hash(self.__value)
