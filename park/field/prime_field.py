@@ -24,23 +24,23 @@ class PrimeFieldValue:
         if not isprime(p):
             raise ValueError("p must be prime")
 
-        self.__value = value % p
-        self.__p = p
+        self.value = value % p
+        self.p = p
 
     def __add__(self, other: int | PrimeFieldValue):
         if isinstance(other, PrimeFieldValue):
-            return PrimeFieldValue(self.__value + other.__value, self.__p)
-        return PrimeFieldValue(self.__value + other, self.__p)
+            return PrimeFieldValue(self.value + other.value, self.p)
+        return PrimeFieldValue(self.value + other, self.p)
 
     def __sub__(self, other: int | PrimeFieldValue):
         if isinstance(other, PrimeFieldValue):
-            return PrimeFieldValue(self.__value - other.__value, self.__p)
-        return PrimeFieldValue(self.__value - other, self.__p)
+            return PrimeFieldValue(self.value - other.value, self.p)
+        return PrimeFieldValue(self.value - other, self.p)
 
     def __mul__(self, other: int | PrimeFieldValue):
         if isinstance(other, PrimeFieldValue):
-            return PrimeFieldValue(self.__value * other.__value, self.__p)
-        return PrimeFieldValue(self.__value * other, self.__p)
+            return PrimeFieldValue(self.value * other.value, self.p)
+        return PrimeFieldValue(self.value * other, self.p)
 
     def __truediv__(self, other: int | PrimeFieldValue):
         if isinstance(other, PrimeFieldValue):
@@ -49,75 +49,75 @@ class PrimeFieldValue:
                 _, x, _ = extended_gcd(a, m)
                 return x % m
 
-            if other.__value == 0:
+            if other.value == 0:
                 raise ZeroDivisionError("Division by zero")
-            inv = mod_inv(other.__value, self.__p)
-            return PrimeFieldValue(self.__value * inv, self.__p)
-        return PrimeFieldValue(self.__value // other, self.__p)
+            inv = mod_inv(other.value, self.p)
+            return PrimeFieldValue(self.value * inv, self.p)
+        return PrimeFieldValue(self.value // other, self.p)
 
     def __mod__(self, other: int | PrimeFieldValue):
         if isinstance(other, PrimeFieldValue):
-            if other.__value == 0:
+            if other.value == 0:
                 raise ZeroDivisionError("Modulo by zero")
-            return PrimeFieldValue(self.__value % other.__value, self.__p)
+            return PrimeFieldValue(self.value % other.value, self.p)
         if other == 0:
             raise ZeroDivisionError("Modulo by zero")
-        return PrimeFieldValue(self.__value % other, self.__p)
+        return PrimeFieldValue(self.value % other, self.p)
 
     def __pow__(self, other: int | PrimeFieldValue):
         if isinstance(other, PrimeFieldValue):
-            return PrimeFieldValue(self.__value**other.__value, self.__p)
+            return PrimeFieldValue(self.value**other.value, self.p)
 
-        return PrimeFieldValue(self.__value**other, self.__p)
+        return PrimeFieldValue(self.value**other, self.p)
 
     def __eq__(self, other: int | PrimeFieldValue):
         if isinstance(other, PrimeFieldValue):
-            return self.__value == other.__value
+            return self.value == other.value
 
-        return self.__value == other
+        return self.value == other
 
     def __ne__(self, other: int | PrimeFieldValue):
         if isinstance(other, PrimeFieldValue):
-            return self.__value != other.__value
+            return self.value != other.value
 
-        return self.__value != other
+        return self.value != other
 
     def __lt__(self, other: int | PrimeFieldValue):
         if isinstance(other, PrimeFieldValue):
-            return self.__value < other.__value
+            return self.value < other.value
 
-        return self.__value < other
+        return self.value < other
 
     def __le__(self, other: int | PrimeFieldValue):
         if isinstance(other, PrimeFieldValue):
-            return self.__value <= other.__value
+            return self.value <= other.value
 
-        return self.__value <= other
+        return self.value <= other
 
     def __gt__(self, other: int | PrimeFieldValue):
         if isinstance(other, PrimeFieldValue):
-            return self.__value > other.__value
+            return self.value > other.value
 
-        return self.__value > other
+        return self.value > other
 
     def __ge__(self, other: int | PrimeFieldValue):
         if isinstance(other, PrimeFieldValue):
-            return self.__value >= other.__value
+            return self.value >= other.value
 
-        return self.__value >= other
+        return self.value >= other
 
     def __str__(self):
-        return str(self.__value)
+        return str(self.value)
 
     def __repr__(self):
-        return f"{self.__class__.__name__}(value={self.__value}, p={self.__p})"
+        return f"{self.__class__.__name__}(value={self.value}, p={self.p})"
 
     def __hash__(self):
-        return hash(self.__value)
+        return hash(self.value)
 
     @property
     def is_zero(self):
-        return self.__value == 0
+        return self.value == 0
 
 
 class PrimeField:

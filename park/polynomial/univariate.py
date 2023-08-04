@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List
 
 from park.field.prime_field import PrimeFieldValue
 
@@ -6,10 +6,13 @@ from park.field.prime_field import PrimeFieldValue
 class UnivariatePolynomial:
     """Univariate polynomial defined over a prime field."""
 
-    def __init__(self, coeffs: List[PrimeFieldValue] | Tuple[PrimeFieldValue] = ()):
+    def __init__(self, coeffs: List[PrimeFieldValue] = []):
         # Make sure that the coefficients are sampled from a prime field.
         if not all([isinstance(c, PrimeFieldValue) for c in coeffs]):
             raise ValueError("Coefficients must be sampled from a prime field")
+
+        # Strip out zeroes
+        coeffs = list(filter(lambda x: not x.is_zero, coeffs))
 
         # The coefficient of `x^i` is stored at location `i` in the list.
         self.coeffs = coeffs
@@ -27,17 +30,16 @@ class UnivariatePolynomial:
 
             # If the degree (i) is one, don't print the exponent.
             if i == 1:
-                terms.append(f"{coeff}x")
+                terms.append(f"{coeff}x" if coeff != 1 else "x")
                 continue
 
             # If a value is one, only print the variable.
             if coeff == 1:
                 terms.append(f"x^{i}")
-                continue
             else:
                 terms.append(f"{coeff}x^{i}")
 
-        return " + ".join(terms[::-1])
+        return " + ".join(terms)
 
     def __len__(self) -> int:
         """The number of coefficients in the polynomial. To get
@@ -48,16 +50,27 @@ class UnivariatePolynomial:
         """
         return len(self.coeffs)
 
-    # def __call__(self, __value: PrimeFieldValue) -> PrimeFieldValue:
-    #     """Evaluate the polynomial on an input. Not suitable for SNARKs.
+    def __call__(self, __value: PrimeFieldValue) -> PrimeFieldValue:
+        """Evaluate the polynomial on an input.
 
-    #     Args:
-    #         __value (int): The input
+        Args:
+            __value (int): The input
 
-    #     Returns:
-    #         int: The polynomial evaluation.
-    #     """
-    #     return sum([c * __value ** (self.degree - i) for i, c in enumerate(self.coeffs)])
+        Returns:
+            int: The polynomial evaluation.
+        """
+        output = PrimeFieldValue(0, self.mod)
+        for i, c in enumerate(self.coeffs):
+            if i == 0:
+                output += c
+            else:
+                output += c * (__value**i)
+
+        return output
+
+    @property
+    def mod(self):
+        return self.coeffs[0].p if len(self) > 0 else 0
 
     @property
     def degree(self):
