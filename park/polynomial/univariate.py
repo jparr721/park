@@ -1,4 +1,5 @@
 from __future__ import annotations
+from functools import reduce
 
 from typing import Iterator, List
 
@@ -53,25 +54,20 @@ class UnivariatePolynomial:
         return iter(self.coeffs)
 
     def __call__(self, __value: PrimeFieldValue) -> PrimeFieldValue:
-        """Evaluate the polynomial on an input.
+        """Evaluate the polynomial on an input via Horner's Method.
 
         Args:
             __value (int): The input
 
         Returns:
-            int: The polynomial evaluation.
+            PrimeFieldValue: The polynomial evaluation.
         """
-        output = PrimeFieldValue(0, self.mod)
-        for i, c in enumerate(self.coeffs):
-            if i == 0:
-                output += c
-            else:
-                output += c * (__value**i)
-
-        return output
+        return reduce(
+            lambda acc, cur: acc + cur[1] * (__value ** cur[0]), enumerate(self.coeffs), PrimeFieldValue(0, self.p)
+        )
 
     @property
-    def mod(self):
+    def p(self):
         return self.coeffs[0].p if len(self) > 0 else 0
 
     @property

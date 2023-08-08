@@ -7,7 +7,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, astuple
 from typing import List, Tuple
-from park.field.prime_field import PrimeFieldValue
+from park.field.prime_field import PrimeFieldValue, PrimeField
+from functools import reduce
 
 
 @dataclass
@@ -65,8 +66,9 @@ class Term:
     def __len__(self) -> int:
         return len(self.__term)
 
-    # def __call__(self, __point: PrimeField) -> PrimeFieldValue:
-    #     return prod([__point[t.var] ** t.power for t in self.__term])  # type: ignore
+    def __call__(self, __point: PrimeField | List[PrimeFieldValue]) -> PrimeFieldValue:
+        p = __point.p if isinstance(__point, PrimeField) else __point[0].p
+        return reduce(lambda acc, cur: acc * pow(__point[cur.var], cur.power), self.__term, PrimeFieldValue(1, p))
 
     def __eq__(self, other: Term):
         if self.degree == other.degree:
@@ -209,6 +211,9 @@ class MultivariatePolynomial:
         # Remove zero entries
         self.__terms: List[MultivariatePolynomialTerm] = list(filter(lambda x: not x.coefficient.is_zero, dedup))
 
+        # The prime field size for the coefficients passed to this polynomial
+        self.p = terms[0].coefficient.p
+
     def __repr__(self):
         out = []
 
@@ -226,6 +231,11 @@ class MultivariatePolynomial:
                     out.append(f"{coeff}{term}")
 
         return " + ".join(out)
+
+    def __call__(self, __point: PrimeField | List[PrimeFieldValue]) -> PrimeFieldValue:
+        return reduce(
+            lambda acc, cur: acc + cur.coefficient * cur.term(__point), self.__terms, PrimeFieldValue(1, self.p)
+        )
 
     @property
     def degree(self):

@@ -85,6 +85,40 @@ def test_term_eq(arith_terms):
     assert t2 == t2
 
 
+def test_term_evaluate1():
+    t1 = Term(
+        [
+            Variable(0, 1),
+            Variable(1, 1),
+        ]
+    )
+    assert t1([PrimeFieldValue(2, 5), PrimeFieldValue(2, 5)]) == 4
+
+
+def test_term_evaluate2():
+    t1 = Term(
+        [
+            Variable(0, 2),
+            Variable(1, 1),
+        ]
+    )
+
+    val = t1([PrimeFieldValue(2, 5), PrimeFieldValue(2, 5)])
+    assert val == 3
+
+
+def test_term_evaluate3():
+    t1 = Term(
+        [
+            Variable(0, 2),
+            Variable(1, 1),
+        ]
+    )
+
+    val = t1([PrimeFieldValue(2, 11), PrimeFieldValue(2, 11)])
+    assert val == 8
+
+
 def test_multivariate_init():
     t1 = Term(
         [
@@ -114,10 +148,6 @@ def test_multivariate_init():
         ],
     )
     assert m is not None
-    # print(t1)
-    # print(t2)
-    # print(t3)
-    # print(m, m.degree)
 
 
 def test_multivariate_repr():

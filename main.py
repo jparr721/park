@@ -2,14 +2,13 @@
 """
 
 from park.field.prime_field import PrimeFieldValue
-from park.polynomial.univariate import UnivariatePolynomial
-from park.polynomial.extension import UnivariateExtensionPolynomial
+from park.polynomial.multivariate import Term, Variable
 
 if __name__ == "__main__":
-    p = 11
-    u1 = UnivariatePolynomial([PrimeFieldValue(2, p), PrimeFieldValue(1, p), PrimeFieldValue(1, p)])
-    u2 = UnivariatePolynomial([PrimeFieldValue(2, p), PrimeFieldValue(1, p), PrimeFieldValue(0, p)])
-
-    ue1 = UnivariateExtensionPolynomial(u1, p)
-    for i in range(p):
-        print(ue1(PrimeFieldValue(i, p)))
+    t1 = Term(
+        [
+            Variable(0, 1),
+            Variable(1, 1),
+        ]
+    )
+    print(t1([PrimeFieldValue(2, 5), PrimeFieldValue(2, 5)]))
